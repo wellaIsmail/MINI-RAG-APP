@@ -18,7 +18,7 @@ class DataConroller(BaseController):
         if file.size > self.app_settings.FILE_MAX_SIZE * self.size_scal:
             return False, ResponseSignals.FILE_SIZE_EXCEED
         return True, ResponseSignals.FILE_UPLOAD_SUCCESS
-    def generate_unique_file_name(self,orig_file_name:str,projet_id:str):
+    def generate_unique_file_path(self,orig_file_name:str,projet_id:str):
         random_key = self.generate_random_string() 
         project_path = ProjectControllers().get_project_path(project_id=projet_id)
         clean_file_name = self.get_clean_file_name(
@@ -35,7 +35,7 @@ class DataConroller(BaseController):
                     project_path,
                     random_key + "_" + clean_file_name
             )
-        return new_file_path
+        return new_file_path,random_key + "_" +clean_file_name
 
     def get_clean_file_name(self,orig_file_name:str):
         # remove any special characters, except underscore and .
