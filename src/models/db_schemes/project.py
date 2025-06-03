@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 
 
 class Project(BaseModel):
-    _id:Optional[ObjectId]
+    id:Optional[ObjectId] = Field(None,alias = "_id")
     project_id:str=Field(...,min_length=1)
     @validator('project_id')
     def validate_project_id(cls, value):
@@ -12,5 +12,7 @@ class Project(BaseModel):
             raise ValueError('Project ID must be alphanumeric')
         return value
     
-    class Config:
-        arbitary_types_allowed = True
+    model_config = {
+        "arbitrary_types_allowed": True,
+        "populate_by_name": True
+    }
