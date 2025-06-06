@@ -101,6 +101,18 @@ $ cp .env.example .env
 $ cd docker
 $ sudo docker compose up -d
 ```
+## The command is used to stop all running Docker containers (sudo or not):
+$ sudo docker stop $(sudo docker ps -aq)
+## The command is used to remove all Docker containers:
+$ sudo docker rm $(sudo docker ps -aq)
+## This command removes all Docker images from your system.
+$ sudo docker rmi $(sudo docker images -q)
+## This command removes all Docker volumes on your system.
+$ sudo docker volume rm $(sudo docker volume ls -q)
+## Purpose: Cleans up everything not actively in use:
+$ sudo docker system prune --all
+
+
 
 ## Run the FastAPI server
 
