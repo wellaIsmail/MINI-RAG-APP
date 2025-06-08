@@ -119,8 +119,19 @@ $ sudo docker system prune --all
 ```bash
 $ uvicorn main:app --reload --host 0.0.0.0 --port 5000
 $ /home/waleed/miniconda3/envs/mini-rag/bin/uvicorn main:app --reload --host 0.0.0.0 --port 5000
+## for env with python 3.9
+$ /home/waleed/miniconda3/envs/mini-rag-py39/bin/uvicorn main:app --reload --host 0.0.0.0 --port 5000
 ```
 
 ## POSTMAN Collection
 
 Download the POSTMAN collection from [/assets/mini-rag-app.postman_collection.json](/assets/mini-rag-app.postman_collection.json)
+
+
+## if on_event("startup") or on_event("shutdown") on main.py obsceleted we can use
+## we can delete them and use :
+## app.router.lifespan.on_startup.append(startup_db_client)
+## app.router.lifespan.on_shutdown.append(shutdown_db_client)
+## before :
+## app.include_router(base.base_router)
+## app.include_router(data.data_router)
