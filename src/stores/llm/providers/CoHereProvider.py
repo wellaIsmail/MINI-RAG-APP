@@ -73,6 +73,10 @@ class CoHereProvider(LLMInterface):
             input_type = input_type,
             embedding_types = ['float']
         )
+        if not response or not response.embeddings or not response.embeddings.float:
+            self.logger.error("Error while embedding text with Cohere")
+            return None
+        return response.embeddings.float[0]
         
 
 
