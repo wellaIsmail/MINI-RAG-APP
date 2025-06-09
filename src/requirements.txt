@@ -403,3 +403,4 @@ watchfiles==1.0.5
     typing_extensions==4.14.0
 websockets==15.0.1
 wheel==0.45.1
+qdrant_client==1.14.2
