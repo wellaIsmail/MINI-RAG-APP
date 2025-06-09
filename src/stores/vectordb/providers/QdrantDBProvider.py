@@ -4,7 +4,7 @@ from ..VectorDBEnums import DistanceMethodEnums
 import logging
 from typing import List
 
-class QdrantDB(VectorDBInterface):
+class QdrantDBProvider(VectorDBInterface):
     def __init__(self, db_path : str, distance_method: str):
 
         self.client = None
@@ -115,7 +115,13 @@ class QdrantDB(VectorDBInterface):
                 self.logger.error(f"error while inserting batch : {e}")
                 return False
         return True
-
+   
+    def search_by_vector(self, collection_name : str, vector:list, limit:int=5):
+        return self.client.search(
+            collection_name=collection_name,
+            query_vector=vector,
+            limit = limit
+        )
 
 
         
