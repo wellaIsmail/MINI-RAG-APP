@@ -1,5 +1,5 @@
 from ..LLMInterface import LLMInterface
-from .LLMEnums import CohereEnums, DocumentTypeEnums
+from ..LLMEnums import CohereEnums, DocumentTypeEnums
 import cohere 
 import logging 
 
@@ -20,7 +20,7 @@ class CoHereProvider(LLMInterface):
         self.embedding_model_id = None
         self.embedding_size = None
 
-        self.client = cohere.Client(api_key=self.api_key)``
+        self.client = cohere.Client(api_key=self.api_key)
 
         self.logger = logging.Logger(__name__)
        
@@ -69,7 +69,7 @@ class CoHereProvider(LLMInterface):
 
         response  = self.client.embed(
             model = self.embedding_model_id,
-            text = [self.process_text(text)],
+            texts = [self.process_text(text)],
             input_type = input_type,
             embedding_types = ['float']
         )
