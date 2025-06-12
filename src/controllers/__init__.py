@@ -1,5 +1,4 @@
-from .DataController import DataController
-from .ProjectController import ProjectController
+from .DataController import DataConroller
+from .ProjectControllers import ProjectControllers
 from .ProcessController import ProcessController
 from .NLPController import NLPController
-

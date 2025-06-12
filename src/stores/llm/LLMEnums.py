@@ -1,15 +1,16 @@
 from enum import Enum
 
 class LLMEnums(Enum):
-    OPENAI = "OPENAI"
-    COHERE = "COHERE"
+
+    OPENAI="OPENAI"
+    COHERE="COHERE"
 
 class OpenAIEnums(Enum):
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
 
-class CoHereEnums(Enum):
+class CohereEnums(Enum):
     SYSTEM = "SYSTEM"
     USER = "USER"
     ASSISTANT = "CHATBOT"
@@ -17,7 +18,6 @@ class CoHereEnums(Enum):
     DOCUMENT = "search_document"
     QUERY = "search_query"
 
-
-class DocumentTypeEnum(Enum):
+class DocumentTypeEnums(Enum):
     DOCUMENT = "document"
     QUERY = "query"
