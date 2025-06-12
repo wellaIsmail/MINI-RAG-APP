@@ -80,6 +80,8 @@ $ cp .env.example .env
 
 ### Run Alembic Migration
 
+$ alembic init alembic
+
 ```bash
 $ alembic upgrade head
 ```

@@ -375,7 +375,7 @@ openai==1.84.0
   typing_extensions==4.14.0
 pipdeptree==2.26.1
   packaging==24.2
-  pip @ file:///croot/pip_1746204010231/work
+  
 pydantic-mongo==3.1.0
   pymongo==4.13.0
     dnspython==2.7.0
@@ -404,3 +404,7 @@ watchfiles==1.0.5
 websockets==15.0.1
 wheel==0.45.1
 qdrant_client==1.14.2
+SQLAlchemy==2.0.41
+asyncpg==0.30.0
+alembic==1.16.1
+psycopg2==2.9.10

@@ -84,6 +84,6 @@ class CoHereProvider(LLMInterface):
     def construct_prompt(self, prompt: str, role:str):
         return{
             "role": role,
-            "text": self.process_text(prompt)
+            "text": prompt
         }
 

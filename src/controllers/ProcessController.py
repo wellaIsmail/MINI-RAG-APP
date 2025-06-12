@@ -14,10 +14,10 @@ class ProcessController(BaseController):
 
         self.project_id = project_id
         self.project_path = ProjectControllers().get_project_path(project_id=project_id)
-    
+
     def get_file_extension(self,file_id:str):
         return os.path.splitext(file_id)[-1]
-    
+
     def get_file_loader(self,file_id:str):
         file_ext = self.get_file_extension(file_id=file_id)
         file_path = os.path.join(
@@ -31,15 +31,15 @@ class ProcessController(BaseController):
         if file_ext == ProcessEnum.PDF.value:
             return PyMuPDFLoader(file_path)
         return None
-        
-    
+
+
     def get_file_content(self,file_id:str):
         loader = self.get_file_loader(file_id=file_id)
         if loader:
             return loader.load()
         else:
             return None
-    
+
     def process_file_content(self,file_content:list,file_id:str,
                              chunk_size:int = 100,
                              overlap_size:int = 20):
