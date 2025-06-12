@@ -1,4 +1,5 @@
 from qdrant_client import models, QdrantClient
+from models.db_schemes import RetrivedDocument
 from ..VectorDBInterface import VectorDBInterface
 from ..VectorDBEnums import DistanceMethodEnums
 import logging
@@ -17,18 +18,18 @@ class QdrantDBProvider(VectorDBInterface):
             self.distance_method = models.Distance.DOT
 
         self.logger = logging.getLogger(__name__)
-        
-        
+
+
 
     def connect(self):
         self.client = QdrantClient(path = self.db_path)
-        
+
 
     def disconnect(self):
         self.client = None
 
     def is_collection_existed(self, collection_name:str) -> bool:
-       
+
         return self.client.collection_exists(collection_name=collection_name)
 
     def list_all_collections(self) -> List:
@@ -36,26 +37,26 @@ class QdrantDBProvider(VectorDBInterface):
 
     def get_collection_info(self, collection_name:str) -> dict:
         return self.client.get_collection(collection_name = collection_name)
-    
+
     def delete_collection(self, collection_name:str):
         if self.is_collection_existed(collection_name=collection_name):
             return self.client.delete_collection(collection_name=collection_name)
-    
+
     def create_collection(self, collection_name:str,
                                 embedding_size:int,
                                 do_reset:bool = False):
         if do_reset:
             _= self.delete_collection(collection_name=collection_name)
-           
+
         if not self.is_collection_existed(collection_name=collection_name):
             _ = self.client.create_collection(
                                      collection_name=collection_name,
                                      vectors_config=models.VectorParams(size=embedding_size, distance=self.distance_method),
                                      )
-            return True    
-        
-        return False 
-    
+            return True
+
+        return False
+
     def insert_one(self, collection_name:str, text:str, vector: list,
                          metadata:dict = None,
                          record_id:str = None):
@@ -80,7 +81,7 @@ class QdrantDBProvider(VectorDBInterface):
             self.logger.error(f"error while inserting record : {e}")
             return False
         return True
-    
+
     def insert_many(self, collection_name:str, texts:list, 
                          vectors: list,
                          metadata:list = None,
@@ -98,7 +99,7 @@ class QdrantDBProvider(VectorDBInterface):
             batch_vectors = vectors[i:batch_end]
             batch_metadata = metadata[i:batch_end]
             batch_record_ids=record_ids[i:batch_end]
-            
+
             batch_records = [
                 models.Record(
                     id=batch_record_ids[x],
@@ -122,13 +123,21 @@ class QdrantDBProvider(VectorDBInterface):
                 self.logger.error(f"error while inserting batch : {e}")
                 return False
         return True
-   
+
     def search_by_vector(self, collection_name : str, vector:list, limit:int=5):
-        return self.client.search(
+        results =  self.client.search(
             collection_name=collection_name,
             query_vector=vector,
             limit = limit
         )
+        if not results or len(results)==0:
+            return None
+        return [
+            RetrivedDocument(**{
+                "score":result.score,
+                "text":result.payload['text'],
+            })
+            for result in results
+        ]
 
 
-        
