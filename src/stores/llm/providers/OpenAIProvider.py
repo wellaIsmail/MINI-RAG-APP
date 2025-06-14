@@ -2,6 +2,7 @@ from ..LLMInterface import LLMInterface
 from ..LLMEnums import OpenAIEnums
 from openai import OpenAI
 import logging
+from typing import List, Union
 
 class OpenAIProvider(LLMInterface):
     def __init__(self, api_key:str, api_url:str = None,
@@ -65,23 +66,40 @@ class OpenAIProvider(LLMInterface):
         return response.choices[0].message.content
 
 
-    def embed_text(self, text: str, document_type:str=None):
+    def embed_text(self, text: Union[str, List[str]], document_type: str = None):
 
         if not self.client:
             self.logger.error("OpenAI client was not set")
             return None
+
+        if isinstance(text, str):
+            text = [text]
+
         if not self.embedding_model_id:
             self.logger.error("Embedding model for OpenAI was not set")
             return None
-        response  = self.client.embeddings.create(
-            model = self.embedding_model_id,
-            input = text
-        )
+        # Example safe call to OpenAI embedding endpoint
+        if isinstance(text, str):
+            input_data = [text]
+        elif isinstance(text, list):
+            input_data = [t for t in text if isinstance(t, str) and t.strip()]
+        else:
+            raise ValueError("Invalid input type for embedding: expected str or list of str")
 
-        if not response or not response.data or len(response.data)==0 or not response.data[0].embedding:
+        response = self.client.embeddings.create(
+            input=input_data,
+            model=self.embedding_model_id,
+          )
+        # response = self.client.embeddings.create(
+        #     model = self.embedding_model_id,
+        #     input = text,
+        # )
+
+        if not response or not response.data or len(response.data) == 0 or not response.data[0].embedding:
             self.logger.error("Error while embedding text with OpenAI")
             return None
-        return response.data[0].embedding
+
+        return [ rec.embedding for rec in response.data ]
 
     def construct_prompt(self, prompt: str, role:str):
         return{
